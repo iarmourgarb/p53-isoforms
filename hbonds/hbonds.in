@@ -1,0 +1,15 @@
+parm /userdata1/Mark/isoforms/trj/p53_393AA_1us.prmtop
+
+trajin concat.trj
+
+rms BBrmsd :1-393@C,CA,N out BBrmsd_wt_1us_CONCAT.dat  #change 1-195 to relevant residue index
+
+go
+
+hbond Backbone1 donormask :DT,DA,DG,DC acceptormask :1-393@C,O,N,H out hbond1_wt_1us_CONCAT.dat avgout avghb1_wt_1us_CONCAT.dat series uuseries bbhbond1_wt_1us_CONCAT.dat
+
+go
+
+hbond Backbone2 donormask :1-393@C,O,N,H acceptormask :DT,DA,DG,DC out hbond2_wt_1us_CONCAT.dat avgout avghb2_wt_1us_CONCAT.dat series uuseries bbhbond2_wt_1us_CONCAT.dat
+
+go
