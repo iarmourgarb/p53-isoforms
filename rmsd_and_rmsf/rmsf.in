@@ -1,0 +1,5 @@
+parm /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.prmtop
+trajin /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.trj 100 last 1 parm /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.prmtop
+reference /userdata1/Isabel/iso2/1tup_2_HOH_av.pdb
+rms reference out 1tup_2_HOH_rms.dat @CA
+atomicfluct out 1tup_2_HOH_rms_full_1.dat :1-341@CA byres
