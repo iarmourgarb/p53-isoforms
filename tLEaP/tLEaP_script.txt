@@ -1,0 +1,129 @@
+#open tleap
+tleap
+
+#for forcefield and waters
+source /home/apps/CENTOS7/amber/amber18/dat/leap/cmd/leaprc.protein.ff14SB 
+source /home/apps/CENTOS7/amber/amber18/dat/leap/cmd/leaprc.gaff
+source /home33/ihan01/bin-thayerlab/leaprc.DNA.bsc1
+source /home/apps/CENTOS7/amber/amber18/dat/leap/cmd/leaprc.water.tip3p
+
+#add hybridization types for Zinc
+addAtomTypes {
+      { "H"   "H"  "sp3" }
+      { "HO"  "H"  "sp3" }
+      { "HS"  "H"  "sp3" }
+      { "H1"  "H"  "sp3" }
+      { "H2"  "H"  "sp3" }
+      { "H3"  "H"  "sp3" }
+      { "H4"  "H"  "sp3" }
+      { "H5"  "H"  "sp3" }
+      { "HW"  "H"  "sp3" }
+      { "HC"  "H"  "sp3" }
+      { "HA"  "H"  "sp3" }
+      { "HP"  "H"  "sp3" }
+      { "OH"  "O"  "sp3" }
+      { "OS"  "O"  "sp3" }
+      { "O"   "O"  "sp2" }
+      { "O2"  "O"  "sp2" }
+      { "OW"  "O"  "sp3" }
+      { "CT"  "C"  "sp3" }
+      { "CH"  "C"  "sp3" }
+      { "C2"  "C"  "sp3" }
+      { "C3"  "C"  "sp3" }
+      { "C"   "C"  "sp2" }
+      { "C*"  "C"  "sp2" }
+      { "CA"  "C"  "sp2" }
+      { "CB"  "C"  "sp2" }
+      { "CC"  "C"  "sp2" }
+      { "CN"  "C"  "sp2" }
+      { "CM"  "C"  "sp2" }
+      { "CK"  "C"  "sp2" }
+      { "CQ"  "C"  "sp2" }
+      { "CD"  "C"  "sp2" }
+      { "CE"  "C"  "sp2" }
+      { "CF"  "C"  "sp2" }
+      { "CP"  "C"  "sp2" }
+      { "CI"  "C"  "sp2" }
+      { "CJ"  "C"  "sp2" }
+      { "CW"  "C"  "sp2" }
+      { "CV"  "C"  "sp2" }
+      { "CR"  "C"  "sp2" }
+      { "CA"  "C"  "sp2" }
+      { "CY"  "C"  "sp2" }
+      { "C0"  "Ca" "sp3" }
+      { "MG"  "Mg" "sp3" }
+      { "N"   "N"  "sp2" }
+      { "NA"  "N"  "sp2" }
+      { "N2"  "N"  "sp2" }
+      { "N*"  "N"  "sp2" }
+      { "NP"  "N"  "sp2" }
+      { "NQ"  "N"  "sp2" }
+      { "NB"  "N"  "sp2" }
+      { "NC"  "N"  "sp2" }
+      { "NT"  "N"  "sp3" }
+      { "N3"  "N"  "sp3" }
+      { "S"   "S"  "sp3" }
+      { "SH"  "S"  "sp3" }
+      { "P"   "P"  "sp3" }
+      { "LP"  ""   "sp3" }
+      { "F"   "F"  "sp3" }
+      { "CL"  "Cl" "sp3" }
+      { "BR"  "Br" "sp3" }
+      { "I"   "I"  "sp3" }
+      { "FE"  "Fe" "sp3" }
+      { "IM"  "Cl" "sp3" }
+      { "IP"  "Na" "sp3" }
+      { "Li"  "Li" "sp3" }
+      { "K"   "K"  "sp3" }
+      { "Rb"  "Rb" "sp3" }       
+      { "Cs"  "Cs" "sp3" }
+      { "Zn"  "Zn" "sp3" }
+      { "IB" "Na"  "sp3" }
+      { "H0" "H"   "sp3" }
+
+ }
+
+#call parameters for prep files
+loadamberprep /home/apps/CENTOS6/amber/amber16/dat/mtkpp/ZAFF/201108/ZAFF.prep
+loadamberparams /home/apps/CENTOS6/amber/amber16/dat/mtkpp/ZAFF/201108/ZAFF.frcmod
+loadamberparams /home/apps/CENTOS6/amber/amber16/dat/leap/parm/frcmod.ff14SB
+
+#library files have some bond info and parameters that will take care of a hybridization error
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/amino12.lib
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/aminont12..lib
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/aminoct12.lib
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/nucleic12.lib
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/atomic_ions.lib
+loadoff /home/apps/CENTOS6/amber/amber16/dat/leap/lib/solvents.lib
+
+#now system is ready to be loaded with pdb (change file name to match isoform)
+x = loadpdb 1tup_wt.pdb
+
+#shows list of atoms and the numberings needed for zinc
+desc x
+
+#bind residue numbers of zinc 
+#(residue numbers will change for different isoforms; 
+#check using output from desc x)
+bond x.394.ZN x.176.SG
+bond x.394.ZN x.238.SG
+bond x.394.ZN x.242.SG
+bond x.394.ZN x.179.ND1
+
+#for rmsd redo on DBD, ZN is 196, SG is 147, 143, 81 and ND1 is 84
+
+#align, check, and dry 
+#(helpful for checking stripped systems)
+alignaxes x
+check x
+saveamberparm x 1tup_wt_dry.prmtop 1tup_wt_dry.inpcrd
+
+#load parameters for water box and add ions to 
+#neutralize the system, and then solvate it 
+addions x Na+ 0
+solvateOct x TIP3PBOX 12.0
+
+#save with name schematics based on isoform
+saveamberparm x 1tup_wt_HOH.prmtop 1tup_wt_HOH.inpcrd
+
+quit
