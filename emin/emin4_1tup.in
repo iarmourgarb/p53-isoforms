@@ -1,0 +1,7 @@
+# 2000 steps of minimization with explicit solvent and ions and 100.0 kcal/mol-A restraints on protein
+
+ &cntrl
+     maxcyc=2000, imin=1, ntmin=1, ncyc=250, cut=9.0, igb=0, ntb=1, ntpr=10, ntr=1,
+     restraint_wt=35.0, restraintmask=':1-239',
+ &end
+END
