@@ -1,0 +1,5 @@
+parm /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.prmtop
+trajin /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.trj parm /userdata1/Isabel/iso2/1tup_2_HOH_strip_1to200.prmtop
+strip :Na+
+strip :WAT
+trajout 1tup_2_HOH_rmsf.rst
